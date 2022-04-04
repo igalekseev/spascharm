@@ -34,16 +34,26 @@ module pushit(
 	 reg [4:0] state = 0;
 	 reg cycle = 0;
 	 reg trigger = 0;
+	 reg trig_save = 0;
+	 reg [17:0] num_save = 0;
+	 reg [35:0] time_save = 0;
 	 
 	 always @(posedge clk) begin
 		 if (busy || (state != 0)) begin
 			cycle <= 0;
 			trigger <= 0;
-		 end else if (trigready) begin
+			if (trigready) begin
+				trig_save <= 1;
+			end
+		 end else if (trigready || trig_save) begin
 			trigger <= 1;
+			num_save <= trignum;
+			time_save <= timenum;
+			trig_save <= 0;
 		 end else if (cycleready) begin
 			cycle <= 1;
-		 end 
+		 end
+		 
 	 end
 	 
 	 always @(posedge clkslow) begin
@@ -61,47 +71,47 @@ module pushit(
 			end
 			end
 		1 : begin
-				data <= trignum[5:0];
+				data <= num_save[5:0];
 				write <= 1;
 				state <= 2;		
 			end
 		2 : begin
-				data <= trignum[11:6];
+				data <= num_save[11:6];
 				write <= 1;
 				state <= 3;		
 			end
 		3 : begin
-				data <= trignum[17:12];
+				data <= num_save[17:12];
 				write <= 1;
 				state <= 4;		
 			end
 		4 : begin
-				data <= timenum[5:0];
+				data <= time_save[5:0];
 				write <= 1;
 				state <= 5;		
 			end
 		5 : begin
-				data <= timenum[11:6];
+				data <= time_save[11:6];
 				write <= 1;
 				state <= 6;		
 			end
 		6 : begin
-				data <= timenum[17:12];
+				data <= time_save[17:12];
 				write <= 1;
 				state <= 7;		
 			end
 		7 : begin
-				data <= timenum[23:18];
+				data <= time_save[23:18];
 				write <= 1;
 				state <= 8;		
 			end
 		8 : begin
-				data <= timenum[29:24];
+				data <= time_save[29:24];
 				write <= 1;
 				state <= 9;		
 			end
 		9 : begin
-				data <= timenum[35:30];
+				data <= time_save[35:30];
 				write <= 1;
 				state <= 0;		
 			end

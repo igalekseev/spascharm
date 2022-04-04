@@ -33,6 +33,8 @@ module trigger(
 	 output reg cyclebegin = 0	// begin of cycle signal 1 clk
     );
 
+	parameter BLKCOUNT = 5;
+
 	reg trigmux = 0;
 	reg trigblock = 0;
 	reg [5:0] blkcnt = 0;
@@ -50,7 +52,7 @@ module trigger(
 		// trigger block
 		if (trigmux) begin
 			trigblock <= 1;
-			blkcnt <= 50;
+			blkcnt <= BLKCOUNT;
 		end else if (blkcnt == 0) begin
 			trigblock <= 0;
 		end else begin
