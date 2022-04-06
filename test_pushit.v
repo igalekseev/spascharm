@@ -80,10 +80,10 @@ module test_pushit;
 		trigready = 1;
 		@(posedge clk);
 		trigready = 0;
-		trignum = 18'h3ABCD;
-		timenum = 36'hFEDCBA987;
 		#100
 		@(posedge clk);
+		trignum = 18'h3ABCD;
+		timenum = 36'hFEDCBA987;
 		trigready = 1;
 		@(posedge clk);
 		trigready = 0;

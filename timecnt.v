@@ -32,6 +32,7 @@
 //                  RST[1]  - reset trigger counter
 //                  RST[2]  - reset cycle counter
 //					All bits are autoclear
+//   4(R)           RST[7] - cycle is on: 1 - beam is on, 0 - no beam
 // 12-13(R)  CYNUM  CYNUM[15:0] - cycle counter
 // 14-15(R)  TRNUM  TRNUM[15:0] - trigger counter
 // 16-19(R)  TMNUM  TMNUM[31:0] - time counter
@@ -83,6 +84,7 @@ module timecnt(
 	wire trigpulse;
 	wire cyclebegin;
 	wire cycleend;
+	wire cycleon;
 //		data to fifo
 	wire trigready;
 	wire cycleready;
@@ -143,7 +145,8 @@ module timecnt(
 		.trigsel(CSR3[1:0]),
 		.trigpulse(trigpulse),
 		.cycleend(cycleend),
-		.cyclebegin(cyclebegin)
+		.cyclebegin(cyclebegin),
+		.cycleon(cycleon)
 	);
 	
 	emugen u_emu (
@@ -236,6 +239,9 @@ module timecnt(
 		3 : begin
 				cpurdata <= CSR3;
 			end
+		4 : begin 
+				cpurdata <= {cycleon,7'h00};
+			end 
 		12 :
 			begin
 				cpurdata <= fromcyclecnt;

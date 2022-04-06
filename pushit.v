@@ -47,8 +47,6 @@ module pushit(
 			end
 		 end else if (trigready || trig_save) begin
 			trigger <= 1;
-			num_save <= trignum;
-			time_save <= timenum;
 			trig_save <= 0;
 		 end else if (cycleready) begin
 			cycle <= 1;
@@ -64,6 +62,8 @@ module pushit(
 				data <= 8'hFF;
 				write <= 1;
 				state <= 1;
+				num_save <= trignum;
+				time_save <= timenum;
 			end else if (cycle) begin
 				data <= 8'hBF;
 				write <= 1;

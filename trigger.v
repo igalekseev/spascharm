@@ -30,7 +30,8 @@ module trigger(
 	 input [1:0] trigsel,		// trgigger selector from register
     output reg trigpulse = 0,	// 1 clk trigger pulse
     output reg cycleend = 0,	// end of cycle signal 1 clk
-	 output reg cyclebegin = 0	// begin of cycle signal 1 clk
+	 output reg cyclebegin = 0,// begin of cycle signal 1 clk
+	 output cycleon
     );
 
 	parameter BLKCOUNT = 5;
@@ -40,6 +41,8 @@ module trigger(
 	reg [5:0] blkcnt = 0;
 	reg [7:0] uscnt = 0;
 	reg [1:0] cycle = 0;
+	
+	assign cycleon = !cycle[0];
 
 	always @(posedge clk) begin
 		// input multiplexer
